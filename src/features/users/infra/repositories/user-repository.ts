@@ -35,6 +35,32 @@ export class UserRepository {
     return this.mapperFromEntityToModel(userEntity);
   }
 
+  async editUser(data: UserParams): Promise<User | undefined> {
+    const userEntity = await UserEntity.findOne(data.uid);
+
+    if (!userEntity) return undefined;
+
+    const userUpdated = UserEntity.create({
+      nome: data.nome,
+      senha: data.senha,
+      uid: data.uid,
+    });
+
+    await userUpdated.save();
+
+    return this.mapperFromEntityToModel(userUpdated);
+  }
+
+  async destroy(uid: string): Promise<User | undefined> {
+    const userEntity = await UserEntity.findOne(uid);
+
+    if (!userEntity) return undefined;
+
+    await UserEntity.remove(userEntity);
+
+    return this.mapperFromEntityToModel(userEntity);
+  }
+
   private mapperFromEntityToModel(entity: UserEntity): User {
     return {
       uid: entity.uid,
