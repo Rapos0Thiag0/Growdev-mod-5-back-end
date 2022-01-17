@@ -19,6 +19,22 @@ export class UserRepository {
     return this.mapperFromEntityToModel(userEntity);
   }
 
+  async getAll(): Promise<User[]> {
+    const userEntities = await UserEntity.find();
+
+    return userEntities.map((userEntity) =>
+      this.mapperFromEntityToModel(userEntity)
+    );
+  }
+
+  async getByUid(uid: string): Promise<User | undefined> {
+    const userEntity = await UserEntity.findOne(uid);
+
+    if (!userEntity) return undefined;
+
+    return this.mapperFromEntityToModel(userEntity);
+  }
+
   private mapperFromEntityToModel(entity: UserEntity): User {
     return {
       uid: entity.uid,
