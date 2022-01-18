@@ -1,4 +1,5 @@
 import { UserEntity } from "../../../../core/infra/data/database/entities/user";
+import { badRequest } from "../../../../core/presentation/helpers/http-helper";
 import { User } from "../../domain/models/user";
 
 interface UserParams {
@@ -13,6 +14,11 @@ export class UserRepository {
       nome: data.nome,
       senha: data.senha,
     });
+
+    const verificaNome = await UserEntity.findOne({
+      where: { nome: data.nome },
+    });
+    if (verificaNome) throw new Error("User exists already");
 
     await userEntity.save();
 
