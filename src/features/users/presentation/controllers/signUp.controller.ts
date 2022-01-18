@@ -11,12 +11,11 @@ export class SignUpUserController implements Controller {
   async handle(req: Request, res: Response): Promise<any> {
     const data = req.body;
 
-    if (!data.nome) return badRequest(res, "EMPTY_NAME_ERROR");
     if (data.senha !== data.senha2) {
       return badRequest(res, "NOT_MATCH_PASS_ERROR");
     }
-    if (!data.senha || !data.senha2) {
-      return badRequest(res, "EMPTY_PASS_ERROR");
+    if (!data.nome || !data.senha || !data.senha2) {
+      return badRequest(res, "EMPTY_FIELDS_ERROR");
     }
     if (data.senha.length < 8 || data.senha.length > 12) {
       return badRequest(res, "LENGHT_PASS_ERROR");
