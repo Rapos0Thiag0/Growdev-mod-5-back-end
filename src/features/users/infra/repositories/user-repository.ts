@@ -1,5 +1,4 @@
 import { UserEntity } from "../../../../core/infra/data/database/entities/user";
-import { badRequest } from "../../../../core/presentation/helpers/http-helper";
 import { User } from "../../domain/models/user";
 
 interface UserParams {
@@ -36,7 +35,9 @@ export class UserRepository {
   }
 
   async getAll(): Promise<User[]> {
-    const userEntities = await UserEntity.find();
+    const userEntities = await UserEntity.find({
+      relations: ["mensagens"],
+    });
 
     return userEntities.map((userEntity) =>
       this.mapperFromEntityToModel(userEntity)
@@ -82,6 +83,7 @@ export class UserRepository {
       uid: entity.uid,
       name: entity.nome,
       password: entity.senha,
+      messages: entity.mensagens,
     };
   }
 }

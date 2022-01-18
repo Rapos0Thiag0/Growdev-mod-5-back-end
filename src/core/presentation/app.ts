@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import UserRoutes from "../../features/users/presentation/routes/UserRoutes";
+import MensagemRoutes from "../../features/mensagens/presentation/routes/MensagemRoutes";
 
 export default class App {
   readonly #express: express.Express;
@@ -25,7 +26,9 @@ export default class App {
     });
 
     const userRoutes = new UserRoutes().init();
+    const mensagemRoutes = new MensagemRoutes().init();
     this.#express.use(userRoutes);
+    this.#express.use(mensagemRoutes);
   }
 
   public start(port: string) {

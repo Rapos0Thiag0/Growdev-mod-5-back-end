@@ -1,15 +1,19 @@
 import { Router } from "express";
-import MensagemController from "../controllers/MensagemController";
+import { CreateMessageController } from "../controllers/create-mensagem.controller";
+import { GetByUidMessageController } from "../controllers/get-one-mensagem.controller";
 
-export default class Routes {
+export default class MensagemRoutes {
   public init(): Router {
     const routes = Router();
 
-    // routes.post("/user/:user_uid/msg", controller.store);
-    // routes.get("/user/:user_uid/msg", controller.index);
-    // routes.get("/user/:user_uid/msg/:uid", controller.view);
-    // routes.put("/user/:user_uid/msg/:uid", controller.update);
-    // routes.delete("/user/:user_uid/msg/:uid", controller.destroy);
+    routes.post("/mensagens/:user_uid", new CreateMessageController().handle);
+    // routes.get("/mensagens/:user_uid", controller.index);
+    routes.get(
+      "/mensagens/:user_uid/:uid",
+      new GetByUidMessageController().handle
+    );
+    // routes.put("mensagens/:user_uid/:uid", controller.update);
+    // routes.delete("/mensagens/:user_uid/:uid", controller.destroy);
 
     return routes;
   }
