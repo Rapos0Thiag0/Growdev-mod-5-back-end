@@ -1,21 +1,25 @@
 import { Request, Response } from "express";
 import { Controller } from "../../../../core/presentation/contracts/controllers";
 import {
+  badRequest,
+  notFound,
   serverError,
   sucess,
 } from "../../../../core/presentation/helpers/http-helper";
 import { UserRepository } from "../../infra/repositories/user-repository";
 
-export class CreatUserController implements Controller {
+export class SignInUserController implements Controller {
   async handle(req: Request, res: Response): Promise<any> {
     try {
       const repository = new UserRepository();
 
-      const user = await repository.create(req.body);
-      console.log(user);
-      return sucess(res, user);
+      const users = await repository.getByName(req.body);
+
+      if (!users) return notFound(res);
+      if (users.password !== req.body.senha) return badRequest(res);
+
+      return sucess(res, users.uid);
     } catch (err) {
-      console.log(res);
       return serverError(res);
     }
   }

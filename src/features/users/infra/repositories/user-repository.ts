@@ -19,6 +19,18 @@ export class UserRepository {
     return this.mapperFromEntityToModel(userEntity);
   }
 
+  async getByName(data: UserParams): Promise<User | undefined> {
+    const userEntity = await UserEntity.findOne({
+      where: [{ nome: data.nome }],
+      relations: ["mensagens"],
+      select: ["nome", "senha", "uid"],
+    });
+
+    if (!userEntity) return undefined;
+
+    return this.mapperFromEntityToModel(userEntity);
+  }
+
   async getAll(): Promise<User[]> {
     const userEntities = await UserEntity.find();
 
