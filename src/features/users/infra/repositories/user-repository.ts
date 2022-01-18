@@ -21,9 +21,7 @@ export class UserRepository {
 
   async signIn(data: UserParams): Promise<User | undefined> {
     const userEntity = await UserEntity.findOne({
-      where: [{ nome: data.nome }],
-      relations: ["mensagens"],
-      select: ["nome", "senha", "uid"],
+      where: { nome: data.nome },
     });
 
     if (!userEntity) return undefined;
