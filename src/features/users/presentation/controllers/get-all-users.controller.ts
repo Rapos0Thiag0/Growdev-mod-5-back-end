@@ -17,8 +17,9 @@ export class GetAllUsersController implements Controller {
       if (users.length === 0) return notFound(res);
 
       return sucess(res, users);
-    } catch (err) {
-      return serverError(res);
+    } catch (err: any) {
+      console.log(res);
+      return serverError(res, err);
     }
   }
 }

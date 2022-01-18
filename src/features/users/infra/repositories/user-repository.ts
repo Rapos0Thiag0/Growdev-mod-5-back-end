@@ -18,7 +18,7 @@ export class UserRepository {
     const verificaNome = await UserEntity.findOne({
       where: { nome: data.nome },
     });
-    if (verificaNome) throw new Error("User exists already");
+    if (verificaNome) throw new Error("ALREADY_EXIST_USER_ERROR");
 
     await userEntity.save();
 
