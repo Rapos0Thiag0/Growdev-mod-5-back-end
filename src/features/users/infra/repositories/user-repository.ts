@@ -8,7 +8,7 @@ interface UserParams {
 }
 
 export class UserRepository {
-  async create(data: UserParams): Promise<User> {
+  async signUp(data: UserParams): Promise<User> {
     const userEntity = UserEntity.create({
       nome: data.nome,
       senha: data.senha,
@@ -19,7 +19,7 @@ export class UserRepository {
     return this.mapperFromEntityToModel(userEntity);
   }
 
-  async getByName(data: UserParams): Promise<User | undefined> {
+  async signIn(data: UserParams): Promise<User | undefined> {
     const userEntity = await UserEntity.findOne({
       where: [{ nome: data.nome }],
       relations: ["mensagens"],
@@ -39,39 +39,39 @@ export class UserRepository {
     );
   }
 
-  async getByUid(uid: string): Promise<User | undefined> {
-    const userEntity = await UserEntity.findOne(uid);
+  // async getByUid(uid: string): Promise<User | undefined> {
+  //   const userEntity = await UserEntity.findOne(uid);
 
-    if (!userEntity) return undefined;
+  //   if (!userEntity) return undefined;
 
-    return this.mapperFromEntityToModel(userEntity);
-  }
+  //   return this.mapperFromEntityToModel(userEntity);
+  // }
 
-  async editUser(data: UserParams): Promise<User | undefined> {
-    const userEntity = await UserEntity.findOne(data.uid);
+  // async editUser(data: UserParams): Promise<User | undefined> {
+  //   const userEntity = await UserEntity.findOne(data.uid);
 
-    if (!userEntity) return undefined;
+  //   if (!userEntity) return undefined;
 
-    const userUpdated = UserEntity.create({
-      nome: data.nome,
-      senha: data.senha,
-      uid: data.uid,
-    });
+  //   const userUpdated = UserEntity.create({
+  //     nome: data.nome,
+  //     senha: data.senha,
+  //     uid: data.uid,
+  //   });
 
-    await userUpdated.save();
+  //   await userUpdated.save();
 
-    return this.mapperFromEntityToModel(userUpdated);
-  }
+  //   return this.mapperFromEntityToModel(userUpdated);
+  // }
 
-  async destroy(uid: string): Promise<User | undefined> {
-    const userEntity = await UserEntity.findOne(uid);
+  // async destroy(uid: string): Promise<User | undefined> {
+  //   const userEntity = await UserEntity.findOne(uid);
 
-    if (!userEntity) return undefined;
+  //   if (!userEntity) return undefined;
 
-    await UserEntity.remove(userEntity);
+  //   await UserEntity.remove(userEntity);
 
-    return this.mapperFromEntityToModel(userEntity);
-  }
+  //   return this.mapperFromEntityToModel(userEntity);
+  // }
 
   private mapperFromEntityToModel(entity: UserEntity): User {
     return {

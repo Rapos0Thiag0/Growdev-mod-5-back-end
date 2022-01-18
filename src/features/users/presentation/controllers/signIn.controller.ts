@@ -13,7 +13,7 @@ export class SignInUserController implements Controller {
     try {
       const repository = new UserRepository();
 
-      const users = await repository.getByName(req.body);
+      const users = await repository.signIn(req.body);
 
       if (!users) return notFound(res);
       if (users.password !== req.body.senha) return badRequest(res);

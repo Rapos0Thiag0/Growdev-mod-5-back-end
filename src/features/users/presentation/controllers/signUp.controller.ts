@@ -11,7 +11,7 @@ export class SignUpUserController implements Controller {
     try {
       const repository = new UserRepository();
 
-      const user = await repository.create(req.body);
+      const user = await repository.signUp(req.body);
 
       return sucess(res, user);
     } catch (err) {
