@@ -11,19 +11,12 @@ interface MensagemParams {
 }
 
 export class MensagemRepository {
-  async create(
-    data: MensagemParams,
-    user_uid: string
-  ): Promise<Mensagem | undefined> {
+  async create(data: MensagemParams): Promise<Mensagem | undefined> {
     const mensagemEntity = MensagemEntity.create({
       descricao: data.descricao,
       detalhamento: data.detalhamento,
-      user_uid: user_uid,
+      user_uid: data.user_uid,
     });
-    const verificaUserByUid = await UserEntity.findOne({
-      where: { uid: user_uid },
-    });
-    if (!verificaUserByUid) return undefined;
 
     await mensagemEntity.save();
 
@@ -64,6 +57,33 @@ export class MensagemRepository {
     return mensagensEntities.map((mensagensEntity) =>
       this.mapperFromEntityToModel(mensagensEntity)
     );
+  }
+
+  async editMessage(data: MensagemParams): Promise<Mensagem | undefined> {
+    const mensagemEntity = await MensagemEntity.findOne(data.uid, {
+      where: { user_uid: data.user_uid },
+    });
+    if (!mensagemEntity) return undefined;
+
+    const mensagemUpdated = MensagemEntity.create({
+      uid: data.uid,
+      descricao: data.descricao,
+      detalhamento: data.detalhamento,
+      user_uid: data.user_uid,
+    });
+
+    await mensagemUpdated.save();
+    return this.mapperFromEntityToModel(mensagemUpdated);
+  }
+
+  async destroy(uid: string, user_uid: string): Promise<Mensagem | undefined> {
+    const mensagemEntity = await MensagemEntity.findOne(uid, {
+      where: { user_uid: user_uid },
+    });
+    if (!mensagemEntity) return undefined;
+
+    await MensagemEntity.remove(mensagemEntity);
+    return this.mapperFromEntityToModel(mensagemEntity);
   }
 
   private mapperFromEntityToModel(entity: MensagemEntity): Mensagem {

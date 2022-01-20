@@ -6,13 +6,13 @@ import {
 } from "../../../../core/presentation/helpers/http-helper";
 import { MensagemRepository } from "../../infra/mensagem-repository";
 
-export class CreateMessageController implements Controller {
+export class DestroyMessageController implements Controller {
   async handle(req: Request, res: Response): Promise<any> {
     try {
+      const { uid, user_uid } = req.params;
       const repository = new MensagemRepository();
-      const { user_uid } = req.params;
 
-      const mensagem = await repository.create({ user_uid, ...req.body });
+      const mensagem = await repository.destroy(uid, user_uid);
 
       return sucess(res, mensagem);
     } catch (err) {
