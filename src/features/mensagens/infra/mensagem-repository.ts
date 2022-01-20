@@ -56,6 +56,16 @@ export class MensagemRepository {
     return loginOk;
   }
 
+  async getAllMessages(user_uid: string): Promise<Mensagem[]> {
+    const mensagensEntities = await MensagemEntity.find({
+      where: { user_uid: user_uid },
+    });
+
+    return mensagensEntities.map((mensagensEntity) =>
+      this.mapperFromEntityToModel(mensagensEntity)
+    );
+  }
+
   private mapperFromEntityToModel(entity: MensagemEntity): Mensagem {
     return {
       uid: entity.uid,
