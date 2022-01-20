@@ -18,7 +18,7 @@ export class LoginUserVerification implements Controller {
 
       const loggedUser = await repository.getLoggedUser(user_uid);
 
-      if (loggedUser.uid !== user_uid) return notFound(res, "USER_NOT_LOGGED");
+      if (user_uid !== loggedUser.uid) return notFound(res, "USER_NOT_LOGGED");
 
       return sucess(res, loggedUser.uid);
     } catch (err) {

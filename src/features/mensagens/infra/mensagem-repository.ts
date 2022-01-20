@@ -45,11 +45,12 @@ export class MensagemRepository {
       where: { uid: user_uid },
     });
 
-    if (!loginUserVerification) return undefined;
+    if (!loginUserVerification) throw new Error("USER_NOT_LOGGED");
+
     const loginOk: User = {
       uid: loginUserVerification.uid,
-      name: loginUserVerification.nome as undefined,
-      password: loginUserVerification.senha as undefined,
+      name: loginUserVerification.nome,
+      password: loginUserVerification.senha,
     };
 
     return loginOk;
