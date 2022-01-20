@@ -1,5 +1,6 @@
 import { MensagemEntity } from "../../../core/infra/data/database/entities/mensagem";
 import { UserEntity } from "../../../core/infra/data/database/entities/user";
+import { User } from "../../users/domain/models/user";
 import { Mensagem } from "../domain/models/mensagem";
 
 interface MensagemParams {
@@ -37,6 +38,21 @@ export class MensagemRepository {
     if (!mensagemEntity) return undefined;
 
     return this.mapperFromEntityToModel(mensagemEntity);
+  }
+
+  async getLoggedUser(user_uid: string): Promise<User | undefined> {
+    const loginUserVerification = await UserEntity.findOne({
+      where: { uid: user_uid },
+    });
+
+    if (!loginUserVerification) return undefined;
+    const loginOk: User = {
+      uid: loginUserVerification.uid,
+      name: loginUserVerification.nome as undefined,
+      password: loginUserVerification.senha as undefined,
+    };
+
+    return loginOk;
   }
 
   private mapperFromEntityToModel(entity: MensagemEntity): Mensagem {
